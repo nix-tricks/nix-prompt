@@ -8,6 +8,10 @@ No framework. No dependencies. No magic.
 
 ![nix-prompt preview](./preview/nixprompt.svg)
 
+> **Note on the name**:
+> `nix-prompt` is not something specific to NixOS.
+> The name comes from my channel, *NIX tricks*, where "nix" refers to Unix-like systems in general. This is a Bash prompt and works on any Linux or Unix-like system.
+
 
 ## Features
 
