@@ -8,9 +8,9 @@ No framework. No dependencies. No magic.
 
 ![nix-prompt preview](./preview/nixprompt.svg)
 
-> **Note on the name**:
-> `nix-prompt` is not something specific to NixOS.
-> The name comes from my channel, *NIX tricks*, where "nix" refers to Unix-like systems in general. This is a Bash prompt and works on any Linux or Unix-like system.
+> **Note**:
+> The preview image shows possible configurations of `nix-prompt` and is meant to demonstrate how the prompt can adapt to different contexts.
+> It does not fully represent a single default configuration. Please read the [Configuration](#configuration) section for details.
 
 
 ## Features
@@ -74,6 +74,15 @@ This is what the install script does:
 4. Repeat for the root user and other users (local & remote)
 
 
+## Nix / NixOS integration (community)
+
+Although the project is called **nix-prompt**, it is **not** specific to Nix or NixOS. The name comes from my YouTube channel, NIX tricks, where "nix" is used in the broader Unix-like sense. The prompt itself is written for **Bash** and is intended to work on any Linux or Unix-like system. That said, if you *are* using Nix or NixOS, this gist from a community member might just be what you're looking for:
+
+- [rcouto/nix-prompt.nix](https://gist.github.com/rcouto/bdb5794940647cf446841f305d65c486)
+
+This is a **Nix flake module** that makes it easy to integrate `nix-prompt` into a Nix-based setup using **Home Manager**. This integration is maintained externally and is not required to use `nix-prompt`, but it's a great option if you're managing your environment with Nix.
+
+
 ## Configuration
 
 **All configuration is centralized in the `config()` function.**
@@ -109,6 +118,12 @@ color_neutral="#5f5f87"   # is used as a faded alternative (e.g. git)
 ```
 
 The global color is automatically selected depending on whether the shell is running as root.
+
+A few things to keep in mind:
+
+- The script must be installed for the **root user as well** if you want the prompt (and alternate color scheme) to apear in root shells
+- It can be installed on **remote machines**, so that when you connect over SSH, the prompt may use the remote configuration
+- There is **no special color handling for error states**. Aside from the exit-status indicator, colors are not changed dynamically
 
 ### 3. Features
 
