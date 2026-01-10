@@ -74,6 +74,8 @@ render_identity() {
     # Define glyph
     if is_error "$status"; then
         if $use_glyphs; then glyph=""; else glyph="!"; fi
+        # Add blinking effect to error state glyph
+        glyph="\001\033[5m\002$glyph\001\033[25m\002"
     elif is_ssh; then
         if $use_glyphs; then glyph="󰌘"; else glyph="*"; fi
     elif is_root; then
@@ -240,7 +242,7 @@ make_badge() {
     # Rendering logic
     printf "%s" "$(make_label "$glyph_left" "$color")"
     printf "\001\033[%sm\002" "$ansi_sequence"
-    printf "%s" "$content"
+    printf "%b" "$content"
     printf "\001\033[0m\002"
     printf "%s" "$(make_label "$glyph_right" "$color")"
 }
