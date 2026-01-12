@@ -204,7 +204,7 @@ make_label() {
     fi
 
     # Print text content
-    printf "%s" "$content"
+    printf "%b" "$content"
 
     if $use_colors; then
         # Reset foreground color
