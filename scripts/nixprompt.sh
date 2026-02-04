@@ -32,6 +32,9 @@ config() {
         color_global=$color_primary
     fi
 
+    # Prevent NF glyphs on console sessions
+    if is_console; then use_glyphs=false; fi
+
     # Define prompt variables
     PS1=""
     PS2="→ "
@@ -161,7 +164,7 @@ render_prompt() {
     local glyph
 
     # Define glyph
-    if $use_glyphs && $use_badges; then glyph="󱞩"; else glyph="↳"; fi
+    if $use_glyphs && $use_badges; then glyph="󱞩"; else glyph="→"; fi
 
     # Prepend space character to match badge
     if $use_badges; then glyph=" $glyph"; fi
@@ -252,6 +255,8 @@ is_root() { [[ $EUID -eq 0 ]]; }
 is_su() { [[ -n $LOGNAME && $USER != "$LOGNAME" ]]; }
 
 is_ssh() { [[ -n "$SSH_CLIENT" ]]; }
+
+is_console() { [[ -t 1 && $TERM == linux ]]; }
 
 is_error() { [[ $1 -ne 0 && $1 -ne 130 ]]; }
 
