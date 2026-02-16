@@ -8,7 +8,7 @@ No framework. No dependencies. No magic.
 
 ![nix-prompt preview](./preview/nixprompt.svg)
 
-> **Note**:
+> [!NOTE]
 > The preview image shows possible configurations of `nix-prompt` and is meant to demonstrate how the prompt can adapt to different contexts.
 > It does not fully represent a single default configuration. Please read the [Configuration](#configuration) section for details.
 
@@ -45,8 +45,6 @@ No framework. No dependencies. No magic.
 - Nerd Font (recommended, for glyphs and rounded badges)
 
 The preview above uses [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip).
-
-Check out more NF goodies at [nerdfonts.com](https://www.nerdfonts.com/font-downloads).
 
 
 ## Installation
