@@ -50,8 +50,7 @@ config() {
 
 init() {
     for segment in "${segments[@]}"; do
-        # Compute function name
-        renderer="render_$segment"
+        local renderer="render_$segment"
 
         # Skip segments without renderers
         if ! declare -F "$renderer" > /dev/null; then continue; fi
@@ -70,12 +69,12 @@ init() {
 ### Renderers
 
 render_identity() {
-    local status=$?
+    local cmd_status=$?
     local glyph
     local label
 
     # Define glyph
-    if is_error "$status"; then
+    if is_error "$cmd_status"; then
         if $use_glyphs; then glyph=""; else glyph="!"; fi
         # Add blinking effect to error state glyph
         glyph="\001\033[5m\002$glyph\001\033[25m\002"
@@ -131,6 +130,7 @@ render_path() {
 render_git() {
     local glyph=""
     local label="%s"
+    local format
 
     # Prevent if not a repository
     if ! is_git; then return 1; fi
@@ -145,7 +145,7 @@ render_git() {
         label="$glyph $label"
     fi
 
-    # Rendering logic
+    # Build format string
     if $use_badges; then
         format="$(make_badge "$label" "$color_neutral")"
     elif $use_colors; then
@@ -155,7 +155,7 @@ render_git() {
     fi
 
     # Safe git prompt
-    if command -v __git_ps1 >/dev/null 2>&1; then
+    if command -v __git_ps1 > /dev/null 2>&1; then
         __git_ps1 "$format"
     fi
 }
@@ -189,28 +189,27 @@ hex_to_ansi() {
     local g=$((16#${hex:2:2}))
     local b=$((16#${hex:4:2}))
 
-    # Set truecolor bg while keeping default fg
-    if $include_bg; then printf "30;48;"; fi
-
-    printf "2;%s;%s;%s" "$r" "$g" "$b"
+    if $include_bg; then
+        printf "30;48;2;%s;%s;%s" "$r" "$g" "$b"
+    else
+        printf "2;%s;%s;%s" "$r" "$g" "$b"
+    fi
 }
 
 make_label() {
     local content=$1
     local color=${2:-$color_global}
 
-    # Prevent null content
+    # Prevent empty content
     if [[ -z $content ]]; then return 1; fi
 
     if $use_colors; then
         printf "\001\033[38;%sm\002" "$(hex_to_ansi "$color")"
     fi
 
-    # Print text content
     printf "%b" "$content"
 
     if $use_colors; then
-        # Reset foreground color
         printf "\001\033[0m\002"
     fi
 }
@@ -222,33 +221,34 @@ make_badge() {
     local glyph_right
     local ansi_sequence
 
-    # Prevent null content
+    # Prevent empty content
     if [[ -z $content ]]; then return 1; fi
 
     if $use_glyphs; then
-        # Use rounded corners
+        # Use NF rounded corners
         glyph_left=$glyph_badge_left
         glyph_right=$glyph_badge_right
     else
-        # Use basic padding
+        # Use plain padding
         content=" $content "
     fi
 
     if $use_colors; then
-        # Set background and foreground sequence
         ansi_sequence=$(hex_to_ansi "$color" true)
     else
         # Reverse video
         ansi_sequence=7
     fi
 
-    # Rendering logic
     printf "%s" "$(make_label "$glyph_left" "$color")"
     printf "\001\033[%sm\002" "$ansi_sequence"
     printf "%b" "$content"
     printf "\001\033[0m\002"
     printf "%s" "$(make_label "$glyph_right" "$color")"
 }
+
+
+### Predicates
 
 is_root() { [[ $EUID -eq 0 ]]; }
 
@@ -267,11 +267,15 @@ get_git_project() {
     # Skip execution if `git` is not available
     if ! command -v git > /dev/null 2>&1; then return 1; fi
 
+    local git_root
     if git_root=$(git rev-parse --show-toplevel 2>/dev/null); then
         # Return the directory basename
         printf "%s" "${git_root##*/}"
     fi
 }
+
+
+### Hooks
 
 # Prepend blank line except after startup or clear
 __print_blank() { [[ -n $__was_printed ]] && echo; __was_printed=1; }

@@ -49,7 +49,6 @@ config() {
 
 init() {
     for segment in "${segments[@]}"; do
-        # Compute function name
         local renderer="render_$segment"
 
         # Skip segments without renderers
@@ -129,6 +128,7 @@ render_path() {
 render_git() {
     local glyph=""
     local label="%s"
+    local format
 
     # Prevent if not a repository
     if ! is_git; then return 1; fi
@@ -143,7 +143,7 @@ render_git() {
         label="$glyph $label"
     fi
 
-    # Rendering logic
+    # Build format string
     if $use_badges; then
         format="$(make_badge "$label" "$color_neutral")"
     elif $use_colors; then
@@ -153,37 +153,38 @@ render_git() {
     fi
 
     # Safe git prompt
-    if command -v __git_ps1 >/dev/null 2>&1; then
+    if command -v __git_ps1 > /dev/null 2>&1; then
         __git_ps1 "$format"
-    else
-        # Native git fallback for Zsh
-        local git_branch git_status=""
-        git_branch=$(
-            git branch --show-current 2>/dev/null ||
-            git rev-parse --short HEAD 2>/dev/null
-        )
-
-        if [[ -z "$git_branch" ]]; then return; fi
-
-        if [[ "$GIT_PS1_SHOWDIRTYSTATE" == "1" ]]; then
-            git diff --quiet 2>/dev/null || git_status+="*"
-            git diff --cached --quiet 2>/dev/null || git_status+="+"
-        fi
-
-        if [[ "$GIT_PS1_SHOWUNTRACKEDFILES" == "1" ]]; then
-            local untracked=""
-            untracked=$(git ls-files --others --exclude-standard 2>/dev/null)
-            [[ -n "$untracked" ]] && git_status+="%"
-        fi
-
-        [[ -n "$git_status" ]] && git_branch+=" $git_status"
-
-        # Escape % so Zsh prompt prints them literally
-        git_branch="${git_branch//\%/%%}"
-
-        # Substitute %s with our git string
-        printf "%s" "${format//\%s/$git_branch}"
+        return
     fi
+
+    # Native git fallback for Zsh
+    local git_branch git_status=""
+    git_branch=$(
+        git branch --show-current 2>/dev/null ||
+        git rev-parse --short HEAD 2>/dev/null
+    )
+
+    [[ -z "$git_branch" ]] && return
+
+    if [[ "$GIT_PS1_SHOWDIRTYSTATE" == "1" ]]; then
+        git diff --quiet 2>/dev/null || git_status+="*"
+        git diff --cached --quiet 2>/dev/null || git_status+="+"
+    fi
+
+    if [[ "$GIT_PS1_SHOWUNTRACKEDFILES" == "1" ]]; then
+        local untracked
+        untracked=$(git ls-files --others --exclude-standard 2>/dev/null)
+        [[ -n "$untracked" ]] && git_status+="%"
+    fi
+
+    [[ -n "$git_status" ]] && git_branch+=" $git_status"
+
+    # Escape % so Zsh prompt prints them literally
+    git_branch="${git_branch//\%/%%}"
+
+    # Substitute %s with the git branch string
+    printf "%s" "${format//\%s/$git_branch}"
 }
 
 render_prompt() {
@@ -215,28 +216,27 @@ hex_to_ansi() {
     local g=$((16#${hex:2:2}))
     local b=$((16#${hex:4:2}))
 
-    # Set truecolor bg while keeping default fg
-    if $include_bg; then printf "30;48;"; fi
-
-    printf "2;%s;%s;%s" "$r" "$g" "$b"
+    if $include_bg; then
+        printf "30;48;2;%s;%s;%s" "$r" "$g" "$b"
+    else
+        printf "2;%s;%s;%s" "$r" "$g" "$b"
+    fi
 }
 
 make_label() {
     local content=$1
     local color=${2:-$color_global}
 
-    # Prevent null content
+    # Prevent empty content
     if [[ -z $content ]]; then return 1; fi
 
     if $use_colors; then
         printf "%%{\033[38;%sm%%}" "$(hex_to_ansi "$color")"
     fi
 
-    # Print text content
     printf "%b" "$content"
 
     if $use_colors; then
-        # Reset foreground color
         printf "%%{\033[0m%%}"
     fi
 }
@@ -244,37 +244,36 @@ make_label() {
 make_badge() {
     local content=$1
     local color=${2:-$color_global}
-    local glyph_left
-    local glyph_right
-    local ansi_sequence
+    local glyph_left glyph_right ansi_sequence
 
-    # Prevent null content
+    # Prevent empty content
     if [[ -z $content ]]; then return 1; fi
 
     if $use_glyphs; then
-        # Use rounded corners
+        # Use NF rounded corners
         glyph_left=$glyph_badge_left
         glyph_right=$glyph_badge_right
     else
-        # Use basic padding
+        # Use plain padding
         content=" $content "
     fi
 
     if $use_colors; then
-        # Set background and foreground sequence
         ansi_sequence=$(hex_to_ansi "$color" true)
     else
         # Reverse video
         ansi_sequence=7
     fi
 
-    # Rendering logic
     printf "%s" "$(make_label "$glyph_left" "$color")"
     printf "%%{\033[%sm%%}" "$ansi_sequence"
     printf "%b" "$content"
     printf "%%{\033[0m%%}"
     printf "%s" "$(make_label "$glyph_right" "$color")"
 }
+
+
+### Predicates
 
 is_root() { [[ $EUID -eq 0 ]]; }
 
@@ -290,15 +289,16 @@ is_git() { [[ -n $(get_git_project) ]]; }
 
 # Get top-level repository name
 get_git_project() {
-    # Skip execution if `git` is not available
     if ! command -v git > /dev/null 2>&1; then return 1; fi
 
     local git_root
     if git_root=$(git rev-parse --show-toplevel 2>/dev/null); then
-        # Return the directory basename
         printf "%s" "${git_root##*/}"
     fi
 }
+
+
+### Hooks
 
 # Prepend blank line except after startup or clear
 __print_blank() { [[ -n $__was_printed ]] && echo; __was_printed=1; }
