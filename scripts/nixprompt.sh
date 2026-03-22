@@ -93,7 +93,7 @@ render_identity() {
     elif is_git; then
         label=$(get_git_project)
     else
-        label="$HOSTNAME"
+        label="${HOSTNAME%%.*}"
         # or "$(date +%I:%M:%S)"
     fi
 
