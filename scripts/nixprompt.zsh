@@ -114,8 +114,8 @@ render_timestamp() {
 }
 
 render_path() {
-    local glyph=" "
-    local label="%2~"
+    local glyph=""
+    local label="%(3~|.../%2~|%~)"
 
     # Rendering logic
     if $use_glyphs; then
