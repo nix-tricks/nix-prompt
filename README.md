@@ -62,7 +62,7 @@ curl -sS https://raw.githubusercontent.com/nix-tricks/nix-prompt/refs/heads/main
 This is what the install script does:
 - Downloads the appropriate script to your home directory as `.nixprompt.[shell]`
 - Creates a backup of any existing file with that name
-- Sources the appropriate script in `.bashrc` or `.zshrc` (if not already sourced)
+- Sources the appropriate script in `.bashrc`, `.zshrc`, or `~/.config/fish/config.fish` (if not already sourced)
 
 ### Manual method
 
@@ -73,6 +73,11 @@ If you want to manually install the prompt script for Bash:
 If you want to manually install the prompt script for Zsh:
 - Download the script `scripts/nixprompt.zsh` to your home directory as an executable file named `.nixprompt.zsh`
 - Source it in `.zshrc` by adding something like: `[ -f ~/.nixprompt.zsh ] && source ~/.nixprompt.zsh`
+
+If you want to manually install the prompt script for Fish:
+- Download the script `scripts/nixprompt.fish` to your home directory as an executable file named `.nixprompt.fish`
+- Source it in `~/.config/fish/config.fish` by adding something like: `test -f ~/.nixprompt.fish; and source ~/.nixprompt.fish`
+
 3. Restart the terminal session to see the changes
 4. Repeat for the root user and other users (local & remote)
 
@@ -151,4 +156,4 @@ GIT_PS1_SHOWDIRTYSTATE=1 # controls the dirty state indicator display
 
 ---
 
-**Note:** This prompt script modifies your `PS1`, `PS2`, and `PROMPT_COMMAND` (or `precmd_functions` in Zsh) environment variables. To revert to your original prompt, simply comment out or remove the source line from your `.bashrc` or `.zshrc` file.
+**Note:** This prompt script modifies your `PS1`, `PS2`, and `PROMPT_COMMAND` (or `precmd_functions` in Zsh, or `fish_prompt` in Fish). To revert to your original prompt, simply comment out or remove the source line from your shell configuration file.

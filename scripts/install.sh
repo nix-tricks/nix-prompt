@@ -8,9 +8,15 @@ BASE_URL="https://raw.githubusercontent.com/nix-tricks/nix-prompt/refs/heads/mai
 if [ "$USER_SHELL" = "zsh" ]; then
     FILE_EXT="zsh"
     RC_FILE="$HOME/.zshrc"
+    RC_INJECT="[ -f ~/.nixprompt.${USER_SHELL} ] && source ~/.nixprompt.${USER_SHELL}"
+elif [ "$USER_SHELL" = "fish" ]; then
+    FILE_EXT="fish"
+    RC_FILE="$HOME/.config/fish/config.fish"
+    RC_INJECT="test -f ~/.nixprompt.${USER_SHELL}; and source ~/.nixprompt.${USER_SHELL}"
 else
     FILE_EXT="sh"
     RC_FILE="$HOME/.bashrc"
+    RC_INJECT="[ -f ~/.nixprompt.${USER_SHELL} ] && source ~/.nixprompt.${USER_SHELL}"
 fi
 
 REMOTE_URL="${BASE_URL}/nixprompt.${FILE_EXT}"
@@ -36,14 +42,17 @@ else
 fi
 
 # Add source lines to rc file if they don't already exist
-if ! grep -qF "[ -f ~/.nixprompt.${USER_SHELL} ] && source ~/.nixprompt.${USER_SHELL}" "$RC_FILE" 2>/dev/null; then
+if ! grep -qF "$RC_INJECT" "$RC_FILE" 2>/dev/null; then
+    # Make sure rc file directory exists
+    mkdir -p "$(dirname "$RC_FILE")"
+
     # Remove all trailing newlines
     if [ -f "$RC_FILE" ]; then
         printf %s "$(cat "$RC_FILE")" > "$RC_FILE"
     fi
 
     printf "\n\n# Custom %s prompt script from NIX tricks" "$USER_SHELL" >> "$RC_FILE"
-    printf "\n[ -f ~/.nixprompt.${USER_SHELL} ] && source ~/.nixprompt.${USER_SHELL}\n\n" >> "$RC_FILE"
+    printf "\n%s\n\n" "$RC_INJECT" >> "$RC_FILE"
     printf "Installation complete. Restart your terminal.\n"
 else
     printf "Already installed.\n"
