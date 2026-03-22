@@ -2,7 +2,7 @@
 set -e
 
 USER_SHELL=$(ps -o comm= -p "$PPID" 2>/dev/null | awk '{print $1}')
-USER_SHELL=$(basename "$USER_SHELL")
+USER_SHELL=${USER_SHELL##*/}
 USER_SHELL=${USER_SHELL#-}
 
 BASE_URL="https://raw.githubusercontent.com/nix-tricks/nix-prompt/refs/heads/main/scripts"

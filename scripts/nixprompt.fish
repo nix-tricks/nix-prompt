@@ -1,3 +1,4 @@
+#!/usr/bin/fish
 # Copyright (c) 2026 NIX tricks
 # Released under the MIT License
 # SPDX-License-Identifier: MIT
