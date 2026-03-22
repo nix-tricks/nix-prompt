@@ -59,11 +59,23 @@ function render_identity
 
     # Define label
     if is_ssh; or is_su
-        set label "$USER@"(prompt_hostname)
+        set -l host (prompt_hostname)
+        if test -z "$host"
+            set host "$hostname"
+        end
+        set label "$USER@$host"
     else if is_git
         set label (get_git_project)
     else
         set label (prompt_hostname)
+        if test -z "$label"
+            set label "$hostname"
+        end
+    end
+
+    # Global fallback to ensure identity is never empty
+    if test -z "$label"
+        set label "$USER"
     end
 
     # Rendering logic
@@ -295,7 +307,8 @@ function is_error
 end
 
 function is_git
-    test -n (get_git_project)
+    set -l project (get_git_project)
+    test -n "$project"
 end
 
 # Get the top-level repository name
