@@ -44,6 +44,7 @@ config() {
 
     # Preserve prompt command (i.e. not to break VTE)
     if [[ $PROMPT_COMMAND != *__print_blank* ]]; then
+        PROMPT_COMMAND="${PROMPT_COMMAND%;}"
         PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }__print_blank"
     fi
 }
