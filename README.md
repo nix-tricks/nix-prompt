@@ -1,6 +1,6 @@
 # `>_` nix-prompt
 
-**A clean, modular Bash prompt with just the right amount of features.**
+**A clean, modular [Bash](#requirements) prompt with just the right amount of features.**
 
 Designed to be **readable**, **hackable**, and **safe** to source in `.bashrc`.
 
@@ -46,12 +46,15 @@ No framework. No dependencies. No magic.
 
 The preview above uses [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip).
 
+> [!NOTE]
+> The script was primarily written for Bash, with care and attention to detail, love for the craft and the best practices in mind. The Zsh and Fish scripts are experimental adaptations mostly written by AI. I've chosen to include them for fun and testing purposes only.
+
 
 ## Installation
 
 Before anything else, make sure your terminal uses a Nerd Font instead of a regular (non-patched) font. The glyphs are used to create those rounded corner badges and display most of the icons. Alternatively, the script can be configured to use fallbacks — check the [Configuration](#configuration) section a little lower.
 
-### Automatic method
+### 1. Automatic method
 
 Just copy and paste this one-liner:
 
@@ -62,21 +65,36 @@ curl -sS https://raw.githubusercontent.com/nix-tricks/nix-prompt/refs/heads/main
 This is what the install script does:
 - Downloads the appropriate script to your home directory as `.nixprompt.[shell]`
 - Creates a backup of any existing file with that name
-- Sources the appropriate script in `.bashrc`, `.zshrc`, or `~/.config/fish/config.fish` (if not already sourced)
+- Sources the script in `.bashrc`, `.zshrc`, or `~/.config/fish/config.fish` (if not already sourced)
 
-### Manual method
+### 2. Manual method
 
 If you want to manually install the prompt script for Bash:
-- Download the script `scripts/nixprompt.sh` to your home directory as an executable file named `.nixprompt.bash`
-- Source it in `.bashrc` by adding something like: `[ -f ~/.nixprompt.bash ] && source ~/.nixprompt.bash`
+- Download the script `scripts/nixprompt.sh` to your home directory as `.nixprompt.bash`
+- Source it in `.bashrc` by adding something like:
+
+```sh
+# Custom Bash prompt script from NIX tricks
+[ -f ~/.nixprompt.bash ] && source ~/.nixprompt.bash
+```
 
 If you want to manually install the prompt script for Zsh:
-- Download the script `scripts/nixprompt.zsh` to your home directory as an executable file named `.nixprompt.zsh`
-- Source it in `.zshrc` by adding something like: `[ -f ~/.nixprompt.zsh ] && source ~/.nixprompt.zsh`
+- Download the script `scripts/nixprompt.zsh` to your home directory as `.nixprompt.zsh`
+- Source it in `.zshrc` by adding something like:
+
+```sh
+# Custom Zsh prompt script from NIX tricks
+[ -f ~/.nixprompt.zsh ] && source ~/.nixprompt.zsh
+```
 
 If you want to manually install the prompt script for Fish:
-- Download the script `scripts/nixprompt.fish` to your home directory as an executable file named `.nixprompt.fish`
-- Source it in `~/.config/fish/config.fish` by adding something like: `test -f ~/.nixprompt.fish; and source ~/.nixprompt.fish`
+- Download the script `scripts/nixprompt.fish` to your home directory as `.nixprompt.fish`
+- Source it in `~/.config/fish/config.fish` by adding something like:
+
+```sh
+# Custom Fish prompt script from NIX tricks
+test -f ~/.nixprompt.fish; and source ~/.nixprompt.fish
+```
 
 3. Restart the terminal session to see the changes
 4. Repeat for the root user and other users (local & remote)
