@@ -15,98 +15,109 @@ No framework. No dependencies. No magic.
 
 ## Features
 
-### 🛠️ Modular segments
+### 🛠️ Modular Segments
+Build your prompt by arranging segments: **Identity** (user/host/custom), **Timestamp**, **Path**, **Git Status**, and **Prompt Symbol**.
 
-- Identity (user / host / context)
-- Timestamp
-- Path
-- Git status
-- Prompt symbol
+### 🎨 Modern Aesthetics
+Enjoy a beautiful, highly readable terminal with **Truecolor support** and clean **Nerd Font icons**. Everything can be customized to match your colors.
 
-
-### 🎨 Modern aesthetics
-
-- Truecolor support
-- Nerd Font icons
-
-
-### 👀 Context-aware
-
-- Root vs user
-- SSH sessions
-- Last error state
-- Git integration
+### 👀 Context-Aware
+The prompt automatically adapts to what you're doing:
+- Distinct accent colors or symbols for **Root** vs **User**
+- Prominent indicators for remote **SSH** sessions
+- Blinking alerts for the **Last error state**
+- Native **Git** status integration (`*`, `+`, `%` indicators)
 
 
 ## Requirements
 
-- Bash ≥ 4
-- Git (optional, for git segment)
-- Nerd Font (recommended, for glyphs and rounded badges)
+- **Bash ≥ 4**, **Zsh**, or **Fish**
+- **Git** (optional, for git segment)
+- **Nerd Font** (recommended, for glyphs and rounded badges)
 
 The preview above uses [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip).
 
 > [!NOTE]
-> The script was primarily written for Bash, with care and attention to detail, love for the craft and the best practices in mind. The Zsh and Fish scripts are experimental adaptations mostly written by AI. I've chosen to include them for fun and testing purposes only.
+> The script was primarily written for **Bash**, with care and attention to detail, love for the craft and the best practices in mind. The **Zsh** and **Fish** scripts are experimental adaptations mostly written by AI. I've chosen to include them for fun and testing purposes only.
 
 
 ## Installation
 
-Before anything else, make sure your terminal uses a Nerd Font instead of a regular (non-patched) font. The glyphs are used to create those rounded corner badges and display most of the icons. Alternatively, the script can be configured to use fallbacks — check the [Configuration](#configuration) section a little lower.
+Before anything else, make sure your terminal uses a **Nerd Font** instead of a regular (non-patched) font. The glyphs are used to create those rounded badges and display some of the icons. Alternatively, the script can be configured to use fallbacks — check the [Configuration](#configuration) section a little lower.
 
-### 1. Automatic method
+### 1. Automatic (Recommended)
 
-Just copy and paste this one-liner:
+The easiest way to install `nix-prompt` is with the one-line installer.
 
 ```bash
 curl -sS https://raw.githubusercontent.com/nix-tricks/nix-prompt/refs/heads/main/scripts/install.sh | bash
 ```
 
-This is what the install script does:
-- Downloads the appropriate script to your home directory as `.nixprompt.[shell]`
-- Creates a backup of any existing file with that name
-- Sources the script in `.bashrc`, `.zshrc`, or `~/.config/fish/config.fish` (if not already sourced)
+<details>
+<summary><strong>What does the install script do? (Click to expand)</strong></summary>
 
-### 2. Manual method
+- Detects your current shell (Bash, Zsh, or Fish)
+- Downloads the specific script version to your home directory (`~/.nixprompt.[shell]`)
+- Creates a backup if an older version exists
+- Automatically sources it in your shell configuration file (`.bashrc`, `.zshrc`, or `config.fish`)
 
-If you want to manually install the prompt script for Bash:
-- Download the script `scripts/nixprompt.sh` to your home directory as `.nixprompt.bash`
-- Source it in `.bashrc` by adding something like:
+</details>
 
-```sh
-# Custom Bash prompt script from NIX tricks
-[ -f ~/.nixprompt.bash ] && source ~/.nixprompt.bash
-```
+### 2. Manual Installation
 
-If you want to manually install the prompt script for Zsh:
-- Download the script `scripts/nixprompt.zsh` to your home directory as `.nixprompt.zsh`
-- Source it in `.zshrc` by adding something like:
+If you prefer to manually download and source the files, choose your shell below:
 
-```sh
-# Custom Zsh prompt script from NIX tricks
-[ -f ~/.nixprompt.zsh ] && source ~/.nixprompt.zsh
-```
+<details>
+<summary><strong>Bash</strong></summary>
 
-If you want to manually install the prompt script for Fish:
-- Download the script `scripts/nixprompt.fish` to your home directory as `.nixprompt.fish`
-- Source it in `~/.config/fish/config.fish` by adding something like:
+1. Download [`scripts/nixprompt.sh`](scripts/nixprompt.sh) to your home directory as `.nixprompt.bash`.
+2. Source it in your `~/.bashrc`:
+   ```bash
+   # Custom Bash prompt script from NIX tricks
+   [ -f ~/.nixprompt.bash ] && source ~/.nixprompt.bash
+   ```
 
-```sh
-# Custom Fish prompt script from NIX tricks
-test -f ~/.nixprompt.fish; and source ~/.nixprompt.fish
-```
+</details>
 
-3. Restart the terminal session to see the changes
-4. Repeat for the root user and other users (local & remote)
+<details>
+<summary><strong>Zsh</strong></summary>
+
+1. Download [`scripts/nixprompt.zsh`](scripts/nixprompt.zsh) to your home directory as `.nixprompt.zsh`.
+2. Source it in your `~/.zshrc`:
+   ```zsh
+   # Custom Zsh prompt script from NIX tricks
+   [ -f ~/.nixprompt.zsh ] && source ~/.nixprompt.zsh
+   ```
+
+</details>
+
+<details>
+<summary><strong>Fish</strong></summary>
+
+1. Download [`scripts/nixprompt.fish`](scripts/nixprompt.fish) to your home directory as `.nixprompt.fish`.
+2. Source it in your `~/.config/fish/config.fish`:
+   ```fish
+   # Custom Fish prompt script from NIX tricks
+   test -f ~/.nixprompt.fish; and source ~/.nixprompt.fish
+   ```
+
+</details>
+
+> [!TIP]
+> Repeat for the root user and other users (local & remote)
+
+*(Don't forget to **restart your terminal session** after installation!)*
 
 
-## Nix / NixOS integration (community)
+## Nix / NixOS Integration
 
-Although the project is called **nix-prompt**, it is **not** specific to Nix or NixOS. The name comes from my YouTube channel, NIX tricks, where "nix" is used in the broader Unix-like sense. The prompt itself is written for **Bash** and is intended to work on any Linux or Unix-like system. That said, if you *are* using Nix or NixOS, this gist from a community member might just be what you're looking for:
+Although the project is called **nix-prompt**, it is **not** strictly tied to Nix or NixOS. The name originates from my YouTube channel, NIX tricks, referring to the broader Unix-like ecosystem.
 
-- [rcouto/nix-prompt.nix](https://gist.github.com/rcouto/bdb5794940647cf446841f305d65c486)
+However, if you *are* using Nix or NixOS, a community member has created a fantastic **Nix flake module** for simple interpolation through **Home Manager**:
 
-This is a **Nix flake module** that makes it easy to integrate `nix-prompt` into a Nix-based setup using **Home Manager**. This integration is maintained externally and is not required to use `nix-prompt`, but it's a great option if you're managing your environment with Nix.
+🔗 [**rcouto/nix-prompt.nix**](https://gist.github.com/rcouto/bdb5794940647cf446841f305d65c486)
+
+*Note: This integration is maintained externally and is purely optional, but it's an excellent choice if you're managing your environment declaratively via Nix.*
 
 
 ## Configuration
@@ -135,43 +146,46 @@ The `dynamics` variable is for segments with renderers that need to be evaluated
 
 ### 2. Colors
 
-There are three color variables that can be customized using hex values:
+Customize these hex values to blend perfectly with your terminal theme:
+| Variable | Default | Description |
+|---|---|---|
+| `color_primary` | `#f5992e` | Accent color for regular users (e.g. Identity badge) |
+| `color_secondary` | `#785cea` | Accent color when running as **Root** |
+| `color_neutral` | `#5f5f87` | Faded alternative tone for secondary segments like Git |
 
-```bash
-color_primary="#f5992e"   # accent for regular users (e.g. identity)
-color_secondary="#785cea" # is the same as the above but for root
-color_neutral="#5f5f87"   # is used as a faded alternative (e.g. git)
-```
+The *global* color is automatically selected depending on whether the shell is running as root or not. Here are some other few things to be aware of:
 
-The global color is automatically selected depending on whether the shell is running as root.
+> [!IMPORTANT]
+> The script must be installed for the **root user as well** if you want the prompt (and alternate color scheme) to apear in root shells.
 
-A few things to keep in mind:
+> [!TIP]
+> It can be installed on **remote machines**, so that when you connect over SSH, the prompt may use the remote configuration.
 
-- The script must be installed for the **root user as well** if you want the prompt (and alternate color scheme) to apear in root shells
-- It can be installed on **remote machines**, so that when you connect over SSH, the prompt may use the remote configuration
-- There is **no special color handling for error states**. Aside from the exit-status indicator, colors are not changed dynamically
+> [!NOTE]
+> There is **no special color handling for error states**. Aside from the exit-status indicator, colors are not changed dynamically.
 
 ### 3. Features
 
-There are three variables that can be used to toggle some of the features:
+Easily toggle major aesthetic features on or off as booleans (`true`/`false`):
 
-```bash
-use_colors=true # can be turned off to use the default foreground color
-use_icons=true  # can be turned off to replace NF glyphs with symbols
-use_badges=true # can be turned off to remove the segment backgrounds
-```
+| Variable | Default | Description |
+|---|---|---|
+| `use_colors` | `true` | Allows prompt segments to be colored via Truecolor ANSI codes |
+| `use_glyphs` | `true` | Uses Nerd Font icons. Set `false` to use regular ASCII symbols |
+| `use_badges` | `true` | Enables rounded badge backgrounds. Set `false` for plain text |
 
 ### 4. Options
 
-There are three environment variables related to prompt configuration:
+Additional environment variables used to style prompt metrics:
 
-```bash
-PROMPT_DIRTRIM=2 # sets the number of trailing directory components
-GIT_PS1_SHOWUNTRACKEDFILES=1 # controls the untracked files indicator
-GIT_PS1_SHOWDIRTYSTATE=1 # controls the dirty state indicator display
-```
+| Variable | Default | Description |
+|---|---|---|
+| `PROMPT_DIRTRIM` | `2` | Trailing directory components to show before truncating path |
+| `GIT_PS1_SHOWUNTRACKEDFILES` | `1` | Show an indicator (`%`) when untracked files exist |
+| `GIT_PS1_SHOWDIRTYSTATE` | `1` | Show indicators (`*` or `+`) for modified or staged files |
 
 
 ---
 
-**Note:** This prompt script modifies your `PS1`, `PS2`, and `PROMPT_COMMAND` (or `precmd_functions` in Zsh, or `fish_prompt` in Fish). To revert to your original prompt, simply comment out or remove the source line from your shell configuration file.
+**How do I uninstall or disable it?**
+Simply comment out or remove the source line from your shell configuration file. This prompt script modifies your `PS1`, `PS2`, and `PROMPT_COMMAND` (or `precmd_functions` in Zsh, or `fish_prompt` in Fish).
