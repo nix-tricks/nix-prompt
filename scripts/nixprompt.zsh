@@ -114,7 +114,7 @@ render_timestamp() {
 }
 
 render_path() {
-    local glyph=""
+    local glyph=""
     local label="%(3~|.../%2~|%~)"
 
     # Rendering logic

@@ -117,7 +117,7 @@ render_timestamp() {
 }
 
 render_path() {
-    local glyph=""
+    local glyph=""
     local label="\w"
 
     # Rendering logic

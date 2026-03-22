@@ -99,7 +99,7 @@ function render_timestamp
 end
 
 function render_path
-    set -l glyph ""
+    set -l glyph ""
     set -l label (prompt_pwd)
 
     # Rendering logic
