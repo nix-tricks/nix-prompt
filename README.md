@@ -104,7 +104,7 @@ If you prefer to manually download and source the files, choose your shell below
 </details>
 
 > [!TIP]
-> Repeat for the root user and other users (local & remote)
+> Repeat the process for the **root user** to be able to use the alternate color scheme. Install on **remote hosts** and customize the colors in the script to be able to use the prompt via SSH.
 
 *(Don't forget to **restart your terminal session** after installation!)*
 
@@ -153,16 +153,12 @@ Customize these hex values to blend perfectly with your terminal theme:
 | `color_secondary` | `#785cea` | Accent color when running as **Root** |
 | `color_neutral` | `#5f5f87` | Faded alternative tone for secondary segments like Git |
 
-The *global* color is automatically selected depending on whether the shell is running as root or not. Here are some other few things to be aware of:
+The *global* color is automatically selected depending on whether the shell is running as root.
 
 > [!IMPORTANT]
-> The script must be installed for the **root user as well** if you want the prompt (and alternate color scheme) to apear in root shells.
-
-> [!TIP]
-> It can be installed on **remote machines**, so that when you connect over SSH, the prompt may use the remote configuration.
-
-> [!NOTE]
-> There is **no special color handling for error states**. Aside from the exit-status indicator, colors are not changed dynamically.
+> - The script must be installed for the **root user as well** if you want the alternate prompt to apear in root shells
+> - It can be installed and customized on **remote machines**, if you want to use the prompt when you connect over SSH
+> - Colors do not change dynamically. There is **no special color handling** to indicate error states aside from the glyph
 
 ### 3. Features
 
