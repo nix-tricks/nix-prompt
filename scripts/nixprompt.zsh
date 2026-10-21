@@ -268,7 +268,7 @@ make_badge() {
     printf "%s" "$(make_label "$glyph_left" "$color")"
     printf "%%{\033[%sm%%}" "$ansi_sequence"
     printf "%b" "$content"
-    printf "%%{\033[0m%%}"
+    printf "%%{\033[0m\033[K%%}"
     printf "%s" "$(make_label "$glyph_right" "$color")"
 }
 

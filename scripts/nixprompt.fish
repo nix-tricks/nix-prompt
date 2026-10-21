@@ -279,7 +279,7 @@ function make_badge
     end
 
     make_label "$glyph_left" "$color"
-    printf "\e[%sm%b\e[0m" "$ansi" "$content"
+    printf "\e[%sm%b\e[0m\e[K" "$ansi" "$content"
     make_label "$glyph_right" "$color"
 end
 
